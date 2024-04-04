@@ -3,29 +3,26 @@ function App() {
 
   return (
     <>
-      <div style={{textAlign: "center"}}>
-        <img src="../django-logo.png" alt="" className="logos"/>
-        <img src="../react-logo.png" alt="" className="logos"/>
-        <img src="../swi-logo.png" alt="" className="logos"/>
+      <div className="logos-container">
+        <img src="../django-logo.png" alt="" className="logo"/>
+        <img src="../react-logo.png" alt="" className="logo"/>
+        <img src="../swi-logo.png" alt="" className="logo"/>
       </div>
 
-      <div id="content">
-        <h2 id="title">PrologChat</h2>
-        <div id="chatDisplay">
+      <div className="content">
+        <h2 className="title">PrologChat</h2>
+        <div className="chat-display">
 
-          <div>
-            <img src="../swi-logo.png" alt="" width={35}/>
-            <label htmlFor="">User</label>
-            <label className="d">Text</label>
-          </div>
-
-          <div className="identifier">
-            <img src="../swi-logo.png" alt="" width={35}/>
-            <label>SwiBot</label>
+          <div className="message-container">
+            <div className="identifier">
+              <img src="../swi-logo.png" alt="" width={35}/>
+              <span>SwiBot</span>
+            </div>
+            <span className="message">fornai</span>
           </div>
 
         </div>
-        <div id="actions">
+        <div className="form">
           <input type="text" placeholder="message..."/>
           <button>Send</button>
         </div>

@@ -25,55 +25,72 @@ a:hover {
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
 }
 
-.logos{
-  height: 90px;
-  padding: 0px 10px;
-  margin-top: 25px;
-  margin-bottom: auto;
-  text-align: center;
+.logos-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-#content{
-  margin: auto 10%;
-  height: 50%;
-  padding: 0px 10px;
+.logo {
+  height: 70px;
 }
 
-#title{
-  margin: 0 2%;
+.content {
+  width: 70%;
+  margin: auto;
 }
 
-#chatDisplay{
-  background: #2C2C2C;
+.title {
+  margin-top: 10px;
+}
+
+.chat-display {
+  background: #2c2c2c;
   border-radius: 15px;
-  padding: 4%;
-  height: 200px;
+  padding: 3%;
+  min-height: calc(60vh - 20px);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin: 10px auto;
 }
 
-.identifier{
+.identifier {
   display: inline-block;
   font-weight: bold;
   vertical-align: middle;
-}
-
-#actions{
   display: flex;
-  justify-content: center;
+  align-items: center;
   gap: 8px;
 }
 
-input{
+.form {
+  width: 80%;
+  display: grid;
+  grid: auto-flow / 5fr 1fr;
+  margin: auto;
+  gap: 8px;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  padding-left: 44px;
+}
+
+input {
   background-color: #242424;
   border-radius: 5px;
-  border: 2px solid #2C2C2C;
+  border: 2px solid #2c2c2c;
   padding: 0.3em 1em;
   font-size: 1em;
   padding-right: 35%;
+  outline: none;
+  height: 25px;
 }
 
 h1 {
@@ -88,13 +105,14 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #2C2C2C;
+  background-color: #2c2c2c;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -111,4 +129,46 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+@media (max-width: 768px) {
+
+  input{
+    height: 40px;
+  }
+
+  .content {
+    width: 95%;
+  }
+
+  .chat-display {
+    padding: 7%;
+  }
+
+  .form {
+    width: 100%;
+    grid: 1fr 1fr / auto-flow;
+  }
+
+  button {
+    height: 50px;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .chat-display {
+    min-height: calc(55vh - 60px);
+
+  }
+
+}
+
+@media (max-width: 480px) {
+  .content {
+    margin: auto 2%;
+  }
+
+
 }
