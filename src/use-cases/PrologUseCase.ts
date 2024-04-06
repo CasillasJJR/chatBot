@@ -8,7 +8,7 @@ export class PrologUseCase {
 
   static readonly prologUrl = import.meta.env.VITE_URL_PROLOG;
 
-  static async sendMessage(question: string): Promise<BotResponse | null> {
+  static async sendMessage(question: string): Promise<BotResponse> {
 
     try {
         const resp = await fetch(PrologUseCase.prologUrl, {

@@ -1,46 +1,70 @@
-import { useState } from "react"
-import { Message } from "./components/Message"
+import { useState } from "react";
+import { MessageEntity } from "./entities/MessageEntity";
+import { useForm } from "./hooks/useForm";
+import { UserMessage } from "./components/UserMessage";
+import { PrologMessage } from "./components/PrologMessage";
+import { PrologUseCase } from "./use-cases/PrologUseCase";
 
-const testMessages = [
-  {
-    message: "Pipipipipi"
-  },
-  {
-    message: "Pipipipipi2"
-  }
-]
+
 
 function App() {
-  const [messages, setMessages] = useState(testMessages)
+  
+  const [messages, setMessages] = useState<MessageEntity[]>([
+    new MessageEntity("prolog", "¿En que puedo ayudarte?")
+  ]);
+
+  const { dataForm, handleInputChange } = useForm<{ userMessage: string }>({
+    initialData: {
+      userMessage: "",
+    },
+  });
+
+  const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if ( dataForm.userMessage === "" ) return;
+    const newUserMessage = new MessageEntity("user", dataForm.userMessage);
+    setMessages(prev=>(
+      [...prev, newUserMessage]
+    ));
+
+    const prologAnswer = await PrologUseCase.sendMessage(newUserMessage.message);
+    const newMessageProlog = new MessageEntity("prolog", prologAnswer.answer);
+
+    setMessages(prev=>(
+      [...prev, newMessageProlog]
+    ));
+  }  
+
   return (
     <>
       <div className="logos-container">
-        <img src="../django-logo.png" alt="" className="logo"/>
-        <img src="../react-logo.png" alt="" className="logo"/>
-        <img src="../swi-logo.png" alt="" className="logo"/>
+        <img src="../django-logo.png" alt="" className="logo" />
+        <img src="../react-logo.png" alt="" className="logo" />
+        <img src="../swi-logo.png" alt="" className="logo" />
       </div>
 
       <div className="content">
         <h2 className="title">PrologChat</h2>
         <div className="chat-display">
-
-          {
-            messages.map(({message})=>{
-              return (
-                <Message imgSrc="../swi-logo.png" message={message} name="no"/>
-              )
-            })
-          }
-
+          {messages.map(({ message, from },idx) => (
+            from === "user"? <UserMessage message={message} key={idx} /> : <PrologMessage message={message} key={idx}  />
+          ))}
         </div>
-        <div className="form">
-          <input type="text" placeholder="message..."/>
-          <button>Send</button>
-        </div>
-        
+        <form onSubmit={handleSendMessage}>
+          <div className="form">
+            <input
+              type="text"
+              placeholder="message..."
+              value={dataForm.userMessage}
+              name="userMessage"
+              onChange={handleInputChange}
+            />
+            <button type="submit">Send</button>
+          </div>
+        </form>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
