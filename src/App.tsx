@@ -1,6 +1,17 @@
+import { useState } from "react"
+import { Message } from "./components/Message"
+
+const testMessages = [
+  {
+    message: "Pipipipipi"
+  },
+  {
+    message: "Pipipipipi2"
+  }
+]
 
 function App() {
-
+  const [messages, setMessages] = useState(testMessages)
   return (
     <>
       <div className="logos-container">
@@ -13,13 +24,13 @@ function App() {
         <h2 className="title">PrologChat</h2>
         <div className="chat-display">
 
-          <div className="message-container">
-            <div className="identifier">
-              <img src="../swi-logo.png" alt="" width={35}/>
-              <span>SwiBot</span>
-            </div>
-            <span className="message">fornai</span>
-          </div>
+          {
+            messages.map(({message})=>{
+              return (
+                <Message imgSrc="../swi-logo.png" message={message} name="no"/>
+              )
+            })
+          }
 
         </div>
         <div className="form">
