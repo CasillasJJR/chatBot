@@ -1,38 +1,78 @@
+import { useEffect, useRef, useState } from "react";
+import { MessageEntity } from "./entities/MessageEntity";
+import { useForm } from "./hooks/useForm";
+import { UserMessage } from "./components/UserMessage";
+import { PrologMessage } from "./components/PrologMessage";
+import { PrologUseCase } from "./use-cases/PrologUseCase";
+
+
 
 function App() {
+  
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const [messages, setMessages] = useState<MessageEntity[]>([
+    new MessageEntity("prolog", "¿En que puedo ayudarte?")
+  ]);
+  
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const { dataForm, handleInputChange } = useForm<{ userMessage: string }>({
+    initialData: {
+      userMessage: "",
+    },
+  });
+
+  const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if ( dataForm.userMessage === "" ) return;
+    const newUserMessage = new MessageEntity("user", dataForm.userMessage);
+    setMessages(prev=>(
+      [...prev, newUserMessage]
+    ));
+
+    const prologAnswer = await PrologUseCase.sendMessage(newUserMessage.message);
+    const newMessageProlog = new MessageEntity("prolog", prologAnswer.answer);
+
+    setMessages(prev=>(
+      [...prev, newMessageProlog]
+    ));
+  }  
 
   return (
     <>
-      <div style={{textAlign: "center"}}>
-        <img src="../django-logo.png" alt="" className="logos"/>
-        <img src="../react-logo.png" alt="" className="logos"/>
-        <img src="../swi-logo.png" alt="" className="logos"/>
+      <div className="logos-container">
+        <img src="../django-logo.png" alt="" className="logo" />
+        <img src="../react-logo.png" alt="" className="logo" />
+        <img src="../swi-logo.png" alt="" className="logo" />
       </div>
 
-      <div id="content">
-        <h2 id="title">PrologChat</h2>
-        <div id="chatDisplay">
-
-          <div>
-            <img src="../swi-logo.png" alt="" width={35}/>
-            <label htmlFor="">User</label>
-            <label className="d">Text</label>
-          </div>
-
-          <div className="identifier">
-            <img src="../swi-logo.png" alt="" width={35}/>
-            <label>SwiBot</label>
-          </div>
-
+      <div className="content">
+        <h2 className="title">PrologChat</h2>
+        <div className="chat-display" ref={chatContainerRef}>
+          {messages.map(({ message, from },idx) => (
+            from === "user"? <UserMessage message={message} key={idx} /> : <PrologMessage message={message} key={idx}  />
+          ))}
         </div>
-        <div id="actions">
-          <input type="text" placeholder="message..."/>
-          <button>Send</button>
-        </div>
-        
+        <form onSubmit={handleSendMessage}>
+          <div className="form">
+            <input
+              type="text"
+              placeholder="message..."
+              value={dataForm.userMessage}
+              name="userMessage"
+              onChange={handleInputChange}
+            />
+            <button type="submit">Send</button>
+          </div>
+        </form>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
