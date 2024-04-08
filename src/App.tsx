@@ -34,6 +34,7 @@ function App() {
     setMessages(prev=>(
       [...prev, newUserMessage]
     ));
+    dataForm.userMessage = ""
 
     const prologAnswer = await PrologUseCase.sendMessage(newUserMessage.message);
     const newMessageProlog = new MessageEntity("prolog", prologAnswer.answer);
